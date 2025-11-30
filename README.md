@@ -67,23 +67,23 @@ The model learns by predicting future states in latent space:
 │                     Financial JEPA                          │
 ├─────────────────────────────────────────────────────────────┤
 │                                                             │
-│  Input x_t (1359 features)                                 │
+│  Input x_t (1359 features)                                  │
 │         ↓                                                   │
-│    [Encoder]  ← 3-layer bidirectional GRU                  │
+│    [Encoder]  ← 3-layer bidirectional GRU                   │
 │         ↓                                                   │
 │    z_t (212d embedding)                                     │
 │         ↓                                                   │
-│    [Predictor]  ← 2-layer MLP                              │
+│    [Predictor]  ← 2-layer MLP                               │
 │         ↓                                                   │
-│    ẑ_{t+k} (predicted future embedding)                    │
+│    ẑ_{t+k} (predicted future embedding)                     │
 │         ↓                                                   │
-│    MSE Loss  ← Compare with target                         │
+│    MSE Loss  ← Compare with target                          │
 │         ↑                                                   │
-│    z'_{t+k} (target embedding)                             │
+│    z'_{t+k} (target embedding)                              │
 │         ↑                                                   │
-│    [Target Encoder]  ← EMA of encoder (τ=0.996)           │
+│    [Target Encoder]  ← EMA of encoder (τ=0.996)             │
 │         ↑                                                   │
-│  Input x_{t+k} (future input)                              │
+│  Input x_{t+k} (future input)                               │
 │                                                             │
 └─────────────────────────────────────────────────────────────┘
 ```
