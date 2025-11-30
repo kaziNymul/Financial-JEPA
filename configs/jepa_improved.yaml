@@ -1,0 +1,70 @@
+seed: 42
+
+logging:
+  tb_dir: "logs/tb_improved"
+
+data:
+  processed_glob: "/mnt/e/JEPA/financial-jepa/financial-jepa/data/processed/data_amex_shards/*.csv"
+  entity_col: "artifacts/features.json"
+  time_col: "timestamp"
+  features: ["*"]
+  window: 6
+  horizon: 1
+  train_ratio: 0.9
+  shuffle_entities: true
+
+model:
+  encoder: "gru"  # Options: "gru", "transformer", "transformer-simple"
+  d_model: 192
+  n_layers: 2     # Increased from 1 for better capacity
+  n_heads: 4      # For transformer encoders
+  dim_feedforward: 768  # For transformer encoders
+  dropout: 0.1
+  predictor_hidden: 256
+  predictor_layers: 2
+  ema_decay: 0.997  # JEPA-style momentum update
+
+  # JEPA-style block masking (ENABLED)
+  masking:
+    time_mask_prob: 0.15       # Mask 15% of time steps
+    time_mask_span: 2          # Contiguous span size
+    feature_mask_prob: 0.10    # Mask 10% of features
+    feature_mask_span: 2       # Contiguous feature span
+    num_time_blocks: 2         # Number of time blocks to mask
+    num_feature_blocks: 1      # Number of feature blocks to mask
+
+# Data augmentation (optional - can disable by removing this section)
+augmentation:
+  jitter:
+    prob: 0.3
+    sigma: 0.03
+  scaling:
+    prob: 0.3
+    sigma: 0.1
+  magnitude_warp:
+    prob: 0.2
+    sigma: 0.15
+  window_warp:
+    prob: 0.2
+    window_ratio: 0.1
+
+train:
+  ckpt_dir: "checkpoints_improved"
+  device: "cpu"  # Change to "cuda" if GPU available
+  batch_size: 16  # Increased from 8
+  max_epochs: 20
+  early_stop_patience: 5
+  lr: 5.0e-4
+  weight_decay: 1.0e-5
+  grad_clip: 1.0
+  log_every_steps: 100
+  ckpt_every_steps: 0  # Set to >0 to save periodic checkpoints
+  warmup_steps: 300    # Increased warmup for stability
+
+loss:
+  type: "cosine"  # Options: "cosine", "l2"
+
+eval:
+  out_dir: "outputs_improved"
+  umap_neighbors: 15
+  umap_min_dist: 0.3

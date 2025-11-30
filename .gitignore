@@ -1,0 +1,149 @@
+# Trained Models (too large for GitHub)
+*.pt
+*.pth
+*.ckpt
+downloaded_models/
+checkpoints/
+outputs/
+outputs_cpu/
+
+# Data (users download from Kaggle)
+*.csv
+*.parquet
+*.feather
+data/
+amex-default-prediction/
+shards/
+
+# AWS Credentials & Secrets
+*.pem
+*.key
+kaggle.json
+terraform.tfvars
+*.tfstate
+*.tfstate.backup
+aws-*_accessKeys.csv
+
+# Terraform
+infra/.terraform/
+.terraform.lock.hcl
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual Environments
+venv/
+.venv
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# Paper Files (exclude from codebase)
+*.tex
+*.bib
+paper*.tex
+references.bib
+*.aux
+*.log
+*.out
+*.toc
+*.bbl
+*.blg
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+figure*.png
+figure*.pdf
+*_arxiv.zip
+paper_backup.tex
+compile_paper.sh
+
+# Generated Results/Figures (exclude analysis)
+model_evaluation_results.json
+downstream_results_job*.json
+generate_paper_figures.py
+generate_model_comparison_figures.py
+
+# Documentation Files (keep only README.md)
+*.md
+!README.md
+!LICENSE
+README_old.md
+PAPER_READY.md
+RESEARCH_PAPER.md
+SUBMISSION_SUMMARY.md
+ARXIV_SUBMISSION_GUIDE.md
+FILES_CREATED.md
+INFRASTRUCTURE_ANALYSIS.md
+OPTIMIZED_CONFIG.md
+DEPLOYMENT.md
+QUICKSTART.md
+START_HERE.md
+LAUNCH_INSTRUCTIONS.txt
+HOW_TO_USE_MODELS.md
+TRAINING_COST_ANALYSIS.md
+IMPROVEMENTS*.md
+COMPLETED.md
+QUICK_REFERENCE.md
+
+# Logs & Monitoring
+logs/
+*.log
+wandb/
+tensorboard/
+mlruns/
+
+# Archives
+*.tar.gz
+*.zip
+
+# Temporary Files
+tmp/
+temp/
+*.tmp
+*.backup
+*.old
+
+# System Files
+Thumbs.db
+.DS_Store
+desktop.ini
+
+# Exclude other project folders
+financial-jepa/
+financial-jepa-realtime-kaggle/

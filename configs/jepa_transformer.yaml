@@ -1,0 +1,70 @@
+seed: 42
+
+logging:
+  tb_dir: "logs/tb_transformer"
+
+data:
+  processed_glob: "/mnt/e/JEPA/financial-jepa/financial-jepa/data/processed/data_amex_shards/*.csv"
+  entity_col: "artifacts/features.json"
+  time_col: "timestamp"
+  features: ["*"]
+  window: 6
+  horizon: 1
+  train_ratio: 0.9
+  shuffle_entities: true
+
+model:
+  encoder: "transformer"  # Use Transformer instead of GRU (more powerful)
+  d_model: 256
+  n_layers: 4
+  n_heads: 8
+  dim_feedforward: 1024
+  dropout: 0.1
+  predictor_hidden: 512
+  predictor_layers: 3
+  ema_decay: 0.997
+
+  # JEPA-style block masking
+  masking:
+    time_mask_prob: 0.20       # More aggressive masking for Transformer
+    time_mask_span: 2
+    feature_mask_prob: 0.15
+    feature_mask_span: 2
+    num_time_blocks: 3         # More blocks for larger model
+    num_feature_blocks: 2
+
+# Stronger augmentation for Transformer
+augmentation:
+  jitter:
+    prob: 0.4
+    sigma: 0.04
+  scaling:
+    prob: 0.4
+    sigma: 0.12
+  magnitude_warp:
+    prob: 0.3
+    sigma: 0.2
+  window_warp:
+    prob: 0.25
+    window_ratio: 0.15
+
+train:
+  ckpt_dir: "checkpoints_transformer"
+  device: "cpu"  # Change to "cuda" for GPU
+  batch_size: 32  # Larger batch for Transformer
+  max_epochs: 30
+  early_stop_patience: 6
+  lr: 3.0e-4      # Lower LR for larger model
+  weight_decay: 5.0e-5
+  grad_clip: 1.0
+  log_every_steps: 100
+  ckpt_every_steps: 0
+  warmup_steps: 500    # Longer warmup for Transformer
+
+loss:
+  type: "cosine"
+
+eval:
+  out_dir: "outputs_transformer"
+  umap_neighbors: 15
+  umap_min_dist: 0.3

@@ -1,0 +1,71 @@
+# Example configuration for development environment
+# Copy this file to terraform.tfvars and customize
+
+# ========================
+# Core Configuration
+# ========================
+aws_region   = "eu-north-1"
+project_name = "financial-jepa"
+environment  = "dev"
+
+# ========================
+# Notebook Configuration
+# ========================
+enable_notebook              = true
+notebook_instance_type       = "ml.g5.xlarge" # GPU instance
+notebook_volume_size         = 100            # GB
+notebook_idle_timeout_minutes = 120           # 2 hours
+
+# ========================
+# Training Configuration
+# ========================
+enable_spot_instances       = true           # Save 60-70% on costs
+training_instance_type      = "ml.g5.xlarge"
+training_instance_count     = 1
+max_training_runtime_hours  = 24
+
+# ========================
+# Endpoint Configuration
+# ========================
+enable_endpoint                          = false # Disabled in dev to save costs
+endpoint_instance_type                   = "ml.m5.large"
+endpoint_min_capacity                    = 1
+endpoint_max_capacity                    = 3
+endpoint_target_invocations_per_instance = 1000
+
+# ========================
+# Monitoring
+# ========================
+enable_monitoring    = true
+alert_email         = "" # Add your email for alerts
+log_retention_days  = 30
+
+# ========================
+# Cost Optimization
+# ========================
+enable_s3_lifecycle_policies = true
+checkpoint_archive_days      = 30  # Archive to cheaper storage after 30 days
+checkpoint_deletion_days     = 365 # Delete after 1 year
+
+# ========================
+# Security
+# ========================
+enable_kms_encryption = false # KMS adds cost, use AES256 for dev
+# allowed_cidr_blocks = ["10.0.0.0/8"] # Restrict if needed
+
+# ========================
+# Feature Flags
+# ========================
+enable_distributed_training   = false
+enable_hyperparameter_tuning  = false
+enable_model_registry         = false
+enable_vpc_endpoints          = false # Enable for production
+
+# ========================
+# Additional Tags
+# ========================
+additional_tags = {
+  Owner       = "data-science-team"
+  CostCenter  = "ml-research"
+  Terraform   = "true"
+}

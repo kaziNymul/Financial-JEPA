@@ -1,0 +1,45 @@
+seed: 42
+
+data:
+  processed_glob: "data/processed/bank/*.csv"
+  entity_col: "entity_id"
+  time_col: "timestamp"
+  features: ["spend","income","balance","payment_ratio","delinquency_count"]
+  window: 8
+  horizon: 1
+  train_ratio: 0.98
+  shuffle_entities: true
+
+model:
+  encoder: "gru"
+  d_model: 96
+  n_layers: 1
+  dropout: 0.1
+  predictor_hidden: 128
+  predictor_layers: 2
+  ema_decay: 0.997
+  masking:
+    time_mask_prob: 0.05
+    feature_mask_prob: 0.02
+
+train:
+  device: "cpu"
+  batch_size: 64
+  grad_accum_steps: 1
+  max_epochs: 2
+  lr: 7.5e-4
+  weight_decay: 1.0e-5
+  grad_clip: 1.0
+  amp: false
+  ckpt_dir: "checkpoints_cpu"
+  ckpt_every_steps: 999999
+  log_every_steps: 200
+  early_stop_patience: 1
+
+loss:
+  type: "cosine"
+
+eval:
+  out_dir: "outputs_cpu"
+  umap_neighbors: 15
+  umap_min_dist: 0.3
