@@ -27,7 +27,7 @@ financial-jepa/
 │   ├── models/                   # Neural network architectures
 │   │   ├── encoder.py           # GRU encoder (1359 → d_model)
 │   │   ├── predictor.py         # MLP predictor (d_model → d_model)
-│   │   └── jepa.py              # Full JEPA model with EMA
+│   │   └── transformer_encoder.py  # Transformer encoder variant
 │   ├── data/                     # Data loading & preprocessing
 │   │   ├── dataset.py           # TimeSeriesDataset
 │   │   └── sharding.py          # Data sharding utilities
@@ -492,38 +492,37 @@ def train_epoch(model, dataloader, optimizer, device):
     return total_loss / len(dataloader)
 ```
 
-### Model Architecture (src/models/jepa.py)
+### Model Architecture (src/train.py)
+
+The JEPA model is assembled in the training script using separate encoder and predictor components:
 
 ```python
-class JEPA(nn.Module):
-    def __init__(self, config):
-        super().__init__()
-        self.encoder = GRUEncoder(
-            input_dim=1359,
-            d_model=212,
-            n_layers=3,
-            dropout=0.178
-        )
-        self.predictor = MLPPredictor(
-            d_model=212,
-            hidden_dim=512,
-            dropout=0.178
-        )
-        self.target_encoder = copy.deepcopy(self.encoder)
-        self.ema_decay = 0.996
-        
-        # Freeze target encoder
-        for param in self.target_encoder.parameters():
-            param.requires_grad = False
-    
-    def update_target_encoder(self):
-        """EMA update of target encoder"""
-        for param, target_param in zip(
-            self.encoder.parameters(),
-            self.target_encoder.parameters()
-        ):
-            target_param.data.mul_(self.ema_decay)
-            target_param.data.add_((1 - self.ema_decay) * param.data)
+# Build encoder (online)
+encoder = build_encoder(cfg)  # From src/models/encoder.py
+# GRUEncoder(input_dim=1359, d_model=212, n_layers=3, dropout=0.178)
+
+# Build predictor
+predictor = MLPPredictor(d_model=212, hidden_dim=512, dropout=0.178)
+
+# Create target encoder (EMA copy)
+target_encoder = copy.deepcopy(encoder)
+for param in target_encoder.parameters():
+    param.requires_grad = False
+
+# Training loop with EMA update
+def ema_update(online_model, target_model, tau=0.996):
+    """Exponential Moving Average update of target encoder"""
+    for online_param, target_param in zip(
+        online_model.parameters(),
+        target_model.parameters()
+    ):
+        target_param.data.mul_(tau)
+        target_param.data.add_((1 - tau) * online_param.data)
+
+# After each batch:
+loss.backward()
+optimizer.step()
+ema_update(encoder, target_encoder, tau=0.996)
 ```
 
 ## 📚 Additional Resources
