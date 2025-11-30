@@ -23,36 +23,36 @@
 
 ```
 financial-jepa/
-├── src/                          # Core model implementation
-│   ├── models/                   # Neural network architectures
-│   │   ├── encoder.py           # GRU encoder (1359 → d_model)
-│   │   ├── predictor.py         # MLP predictor (d_model → d_model)
-│   │   └── transformer_encoder.py  # Transformer encoder variant
-│   ├── data/                     # Data loading & preprocessing
-│   │   ├── dataset.py           # TimeSeriesDataset
-│   │   └── sharding.py          # Data sharding utilities
-│   ├── train.py                  # Training loop
-│   ├── loss.py                   # JEPA loss (MSE in latent space)
-│   └── utils.py                  # Utilities
-├── configs/                      # Hyperparameter configurations
-│   ├── job1.yaml                # 277d, 2 layers
-│   ├── job2.yaml                # 189d, 1 layer
+├── src/                              # Core model implementation
+│   ├── models/                       # Neural network architectures
+│   │   ├── encoder.py                # GRU encoder (1359 → d_model)
+│   │   ├── predictor.py              # MLP predictor (d_model → d_model)
+│   │   └── transformer_encoder.py    # Transformer encoder variant
+│   ├── data/                         # Data loading & preprocessing
+│   │   ├── dataset.py                # TimeSeriesDataset
+│   │   └── sharding.py               # Data sharding utilities
+│   ├── train.py                      # Training loop
+│   ├── loss.py                       # JEPA loss (MSE in latent space)
+│   └── utils.py                      # Utilities
+├── configs/                          # Hyperparameter configurations
+│   ├── job1.yaml                     # 277d, 2 layers
+│   ├── job2.yaml                     # 189d, 1 layer
 │   ├── ...
-│   └── job8.yaml                # 212d, 3 layers (best model)
-├── infra/                        # AWS Infrastructure as Code
-│   ├── main.tf                  # VPC, S3, IAM roles
-│   ├── training.tf              # SageMaker training jobs
-│   ├── variables.tf             # Terraform variables
-│   └── terraform.tfvars.example # Configuration template
-├── scripts/                      # Automation scripts
-│   ├── prepare_data.sh          # Preprocess AMEX data
-│   ├── build_and_push_docker.sh # Build training container
+│   └── job8.yaml                     # 212d, 3 layers (best model)
+├── infra/                            # AWS Infrastructure as Code
+│   ├── main.tf                       # VPC, S3, IAM roles
+│   ├── training.tf                   # SageMaker training jobs
+│   ├── variables.tf                  # Terraform variables
+│   └── terraform.tfvars.example      # Configuration template
+├── scripts/                          # Automation scripts
+│   ├── prepare_data.sh               # Preprocess AMEX data
+│   ├── build_and_push_docker.sh      # Build training container
 │   ├── start_continuous_training.py  # Launch 8 parallel jobs
-│   ├── monitor_training.sh      # Watch training progress
-│   └── download_best_model.sh   # Download trained models
-├── downstream_evaluation.py      # Evaluate on fraud/risk/segmentation
-├── evaluate_models.py            # Compare 8 trained models
-└── Dockerfile                    # Training container image
+│   ├── monitor_training.sh           # Watch training progress
+│   └── download_best_model.sh        # Download trained models
+├── downstream_evaluation.py          # Evaluate on fraud/risk/segmentation
+├── evaluate_models.py                # Compare 8 trained models
+└── Dockerfile                        # Training container image
 
 ```
 
